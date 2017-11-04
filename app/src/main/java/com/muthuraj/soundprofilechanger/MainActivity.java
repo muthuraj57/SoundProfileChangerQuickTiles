@@ -104,6 +104,17 @@ public class MainActivity extends AppCompatActivity {
             helperText.setText(getString(R.string.permission_granted));
             requestPermissionButton.setVisibility(View.GONE);
             soundProfileContainer.setVisibility(View.VISIBLE);
+            switch (audioManager.getRingerMode()) {
+                case AudioManager.RINGER_MODE_NORMAL:
+                    normalCheckBox.setChecked(true);
+                    break;
+                case AudioManager.RINGER_MODE_VIBRATE:
+                    vibrateCheckBox.setChecked(true);
+                    break;
+                case AudioManager.RINGER_MODE_SILENT:
+                    silentCheckBox.setChecked(true);
+                    break;
+            }
         } else {
             helperText.setText(getString(R.string.permission_rationale));
             requestPermissionButton.setVisibility(View.VISIBLE);
