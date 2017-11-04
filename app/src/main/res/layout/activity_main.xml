@@ -42,28 +42,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/normal"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="setSoundMode"
-                android:text="Normal" />
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_vertical_margin">
 
-            <Button
-                android:id="@+id/vibrate"
+                <CheckBox
+                    android:id="@+id/normal_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="setSoundMode" />
+
+                <TextView
+                    android:id="@+id/normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Normal" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="setVibrateMode"
-                android:text="Vibrate" />
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_vertical_margin">
 
-            <Button
-                android:id="@+id/silent"
+                <CheckBox
+                    android:id="@+id/vibrate_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="setVibrateMode" />
+
+                <TextView
+                    android:id="@+id/vibrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vibrate" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="setSilentMode"
-                android:text="Silent" />
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_vertical_margin">
+
+                <CheckBox
+                    android:id="@+id/silent_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="setSilentMode" />
+
+                <TextView
+                    android:id="@+id/silent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Silent" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

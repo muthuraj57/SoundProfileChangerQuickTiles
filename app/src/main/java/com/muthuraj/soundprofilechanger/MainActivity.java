@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private Button requestPermissionButton;
     private View soundProfileContainer;
     private TextView helperText;
+
+    private CheckBox normalCheckBox;
+    private CheckBox vibrateCheckBox;
+    private CheckBox silentCheckBox;
 
 
     @Override
@@ -36,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         requestPermissionButton = (Button) findViewById(R.id.button);
         soundProfileContainer = findViewById(R.id.sound_profile_container);
 
+        normalCheckBox = (CheckBox) findViewById(R.id.normal_checkbox);
+        vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
+        silentCheckBox = (CheckBox) findViewById(R.id.silent_checkbox);
+
         requestPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setViewsForAccessGranted(notificationManager.isNotificationPolicyAccessGranted());
     }
 
-    private void setToolbar(){
+    private void setToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Sound Profile Changer");
         setSupportActionBar(toolbar);
@@ -64,16 +73,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setSoundMode(View view) {
+        normalCheckBox.setChecked(true);
+        vibrateCheckBox.setChecked(false);
+        silentCheckBox.setChecked(false);
+
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
     }
 
     public void setVibrateMode(View view) {
+        normalCheckBox.setChecked(false);
+        vibrateCheckBox.setChecked(true);
+        silentCheckBox.setChecked(false);
+
         audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_VIBRATE);
     }
 
     public void setSilentMode(View view) {
+        normalCheckBox.setChecked(false);
+        vibrateCheckBox.setChecked(false);
+        silentCheckBox.setChecked(true);
+
         audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
     }
