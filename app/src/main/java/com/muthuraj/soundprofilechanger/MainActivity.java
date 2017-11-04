@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox normalCheckBox;
     private CheckBox vibrateCheckBox;
     private CheckBox silentCheckBox;
+    private CheckBox musicOffCheckBox;
 
 
     @Override
@@ -37,13 +38,14 @@ public class MainActivity extends AppCompatActivity {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        helperText = (TextView) findViewById(R.id.helper_text);
-        requestPermissionButton = (Button) findViewById(R.id.button);
+        helperText = findViewById(R.id.helper_text);
+        requestPermissionButton = findViewById(R.id.button);
         soundProfileContainer = findViewById(R.id.sound_profile_container);
 
-        normalCheckBox = (CheckBox) findViewById(R.id.normal_checkbox);
-        vibrateCheckBox = (CheckBox) findViewById(R.id.vibrate_checkbox);
-        silentCheckBox = (CheckBox) findViewById(R.id.silent_checkbox);
+        normalCheckBox = findViewById(R.id.normal_checkbox);
+        vibrateCheckBox = findViewById(R.id.vibrate_checkbox);
+        silentCheckBox = findViewById(R.id.silent_checkbox);
+        musicOffCheckBox = findViewById(R.id.music_off_checkbox);
 
         requestPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Sound Profile Changer");
         setSupportActionBar(toolbar);
     }
@@ -73,29 +75,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setSoundMode(View view) {
-        normalCheckBox.setChecked(true);
-        vibrateCheckBox.setChecked(false);
-        silentCheckBox.setChecked(false);
+        checkNormalMode();
 
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
     }
 
     public void setVibrateMode(View view) {
-        normalCheckBox.setChecked(false);
-        vibrateCheckBox.setChecked(true);
-        silentCheckBox.setChecked(false);
+        checkVibrateMode();
 
         audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_VIBRATE);
     }
 
     public void setSilentMode(View view) {
-        normalCheckBox.setChecked(false);
-        vibrateCheckBox.setChecked(false);
-        silentCheckBox.setChecked(true);
+        checkSilentMode();
 
         audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+    }
+
+    public void setMusicOff(View view) {
+        checkMusicOffMode();
+
+        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
     }
 
@@ -106,13 +109,17 @@ public class MainActivity extends AppCompatActivity {
             soundProfileContainer.setVisibility(View.VISIBLE);
             switch (audioManager.getRingerMode()) {
                 case AudioManager.RINGER_MODE_NORMAL:
-                    normalCheckBox.setChecked(true);
+                    if (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) == 0) {
+                        checkMusicOffMode();
+                    } else {
+                        checkNormalMode();
+                    }
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    vibrateCheckBox.setChecked(true);
+                    checkVibrateMode();
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
-                    silentCheckBox.setChecked(true);
+                    checkSilentMode();
                     break;
             }
         } else {
@@ -120,5 +127,33 @@ public class MainActivity extends AppCompatActivity {
             requestPermissionButton.setVisibility(View.VISIBLE);
             soundProfileContainer.setVisibility(View.GONE);
         }
+    }
+
+    private void checkNormalMode() {
+        normalCheckBox.setChecked(true);
+        vibrateCheckBox.setChecked(false);
+        silentCheckBox.setChecked(false);
+        musicOffCheckBox.setChecked(false);
+    }
+
+    private void checkVibrateMode() {
+        normalCheckBox.setChecked(false);
+        vibrateCheckBox.setChecked(true);
+        silentCheckBox.setChecked(false);
+        musicOffCheckBox.setChecked(false);
+    }
+
+    private void checkSilentMode() {
+        normalCheckBox.setChecked(false);
+        vibrateCheckBox.setChecked(false);
+        silentCheckBox.setChecked(true);
+        musicOffCheckBox.setChecked(false);
+    }
+
+    private void checkMusicOffMode() {
+        normalCheckBox.setChecked(false);
+        vibrateCheckBox.setChecked(false);
+        silentCheckBox.setChecked(false);
+        musicOffCheckBox.setChecked(true);
     }
 }

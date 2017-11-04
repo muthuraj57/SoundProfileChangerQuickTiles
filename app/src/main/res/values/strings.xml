@@ -8,5 +8,6 @@
     <string name="sound">Sound</string>
     <string name="vibrate">Vibrate</string>
     <string name="silent">Silent</string>
+    <string name="music_off">Music Off</string>
     <string name="permission_rationale">To change sound profile, this app needs access to change Do Not Disturb permission</string>
 </resources>

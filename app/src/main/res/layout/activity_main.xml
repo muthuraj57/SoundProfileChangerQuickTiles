@@ -103,6 +103,26 @@
                     android:layout_height="wrap_content"
                     android:text="Silent" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setMusicOff"
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_vertical_margin">
+
+                <CheckBox
+                    android:id="@+id/music_off_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="setMusicOff" />
+
+                <TextView
+                    android:id="@+id/music_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Music Only Off" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
