@@ -10,7 +10,9 @@ import android.media.AudioManager;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
+import android.support.annotation.DrawableRes;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -169,26 +171,38 @@ public class SoundProfileTileService extends TileService {
         setTileMusicOff();
     }
 
+    private final SparseArray<Icon> iconSparseArray = new SparseArray<>();
+
+    private Icon getIconForResId(@DrawableRes int drawableRes) {
+        Icon cachedIcon = iconSparseArray.get(drawableRes);
+        if (cachedIcon != null) {
+            return cachedIcon;
+        }
+        Icon createdIcon = Icon.createWithResource(this, drawableRes);
+        iconSparseArray.put(drawableRes, createdIcon);
+        return createdIcon;
+    }
+
     private void setTileSilent() {
-        getQsTile().setIcon(Icon.createWithResource(this, R.drawable.ic_volume_off_white_24dp));
+        getQsTile().setIcon(getIconForResId(R.drawable.ic_volume_off_white_24dp));
         getQsTile().setLabel(getString(R.string.silent));
         getQsTile().updateTile();
     }
 
     private void setTileVibrate() {
-        getQsTile().setIcon(Icon.createWithResource(this, R.drawable.ic_vibration_white_24dp));
+        getQsTile().setIcon(getIconForResId(R.drawable.ic_vibration_white_24dp));
         getQsTile().setLabel(getString(R.string.vibrate));
         getQsTile().updateTile();
     }
 
     private void setTileSound() {
-        getQsTile().setIcon(Icon.createWithResource(this, R.drawable.ic_volume_up_white_24dp));
+        getQsTile().setIcon(getIconForResId(R.drawable.ic_volume_up_white_24dp));
         getQsTile().setLabel(getString(R.string.sound));
         getQsTile().updateTile();
     }
 
     private void setTileMusicOff() {
-        getQsTile().setIcon(Icon.createWithResource(this, R.drawable.ic_music_off));
+        getQsTile().setIcon(getIconForResId(R.drawable.ic_music_off));
         getQsTile().setLabel(getString(R.string.music_off));
         getQsTile().updateTile();
     }
