@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             soundProfileContainer.setVisibility(View.VISIBLE);
             switch (audioManager.getRingerMode()) {
                 case AudioManager.RINGER_MODE_NORMAL:
-                    if (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) == 0) {
+                    if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
                         checkMusicOffMode();
                     } else {
                         checkNormalMode();

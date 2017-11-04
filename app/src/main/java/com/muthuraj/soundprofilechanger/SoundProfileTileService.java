@@ -96,7 +96,7 @@ public class SoundProfileTileService extends TileService {
             getQsTile().setState(Tile.STATE_ACTIVE);
             switch (audioManager.getRingerMode()) {
                 case AudioManager.RINGER_MODE_NORMAL:
-                    if (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) == 0) {
+                    if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
                         setMusicOffMode();
                     } else {
                         setTileSound();
