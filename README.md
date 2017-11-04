@@ -11,6 +11,6 @@ A handy quick Tiles to change audio profiles
 
 ![Vibrate Mode](https://github.com/muthuraj57/SoundProfileChangerQuickTiles/blob/master/demo_assets/ic_vibration.png)  Music volume and Ringer volume zero with vibration on.
 
-![Silent Mode](https://github.com/muthuraj57/SoundProfileChangerQuickTiles/blob/master/demo_assets/ic_vibration.png)  Music volume and Ringer volume zero with no vibration.
+![Silent Mode](https://github.com/muthuraj57/SoundProfileChangerQuickTiles/blob/master/demo_assets/ic_volume_off.png)  Music volume and Ringer volume zero with no vibration.
 
-![Music Only Off Mode](https://github.com/muthuraj57/SoundProfileChangerQuickTiles/blob/master/demo_assets/ic_vibration.png)  Ringer volume max and music volume zero.
+![Music Only Off Mode](https://github.com/muthuraj57/SoundProfileChangerQuickTiles/blob/master/demo_assets/ic_music-off.png)  Ringer volume max and music volume zero.
