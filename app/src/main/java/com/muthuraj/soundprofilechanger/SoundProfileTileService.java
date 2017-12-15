@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Created by muthu-3955 on 12/02/17.
@@ -24,6 +25,11 @@ public class SoundProfileTileService extends TileService {
 
     private AudioManager audioManager;
     private NotificationManager notificationManager;
+
+    private String soundString;
+    private String silenString;
+    private String vibrateString;
+    private String noMusicString;
 
     @Override
     public void onStopListening() {
@@ -89,30 +95,68 @@ public class SoundProfileTileService extends TileService {
     }
 
     private void initTile() {
+        initStrings();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager.isNotificationPolicyAccessGranted()) {
             getQsTile().setState(Tile.STATE_ACTIVE);
+
+            Context context = getBaseContext();
             switch (audioManager.getRingerMode()) {
                 case AudioManager.RINGER_MODE_NORMAL:
                     if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
-                        setMusicOffMode();
+                        if (PreferenceUtil.isModeEnabled(context, PreferenceUtil.MODE_NO_MEDIA)) {
+                            setMusicOffMode();
+                        } else {
+                            setTileInactive();
+                        }
                     } else {
-                        setTileSound();
+                        if (PreferenceUtil.isModeEnabled(context, PreferenceUtil.MODE_NORMAL)) {
+                            setTileSound();
+                        } else {
+                            setTileInactive();
+                        }
                     }
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    setTileVibrate();
+                    if (PreferenceUtil.isModeEnabled(context, PreferenceUtil.MODE_VIBRATE)) {
+                        setTileVibrate();
+                    } else {
+                        setTileInactive();
+                    }
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
-                    setTileSilent();
+                    if (PreferenceUtil.isModeEnabled(context, PreferenceUtil.MODE_SILENT)) {
+                        setTileSilent();
+                    } else {
+                        setTileInactive();
+                    }
                     break;
             }
         } else {
-            getQsTile().setState(Tile.STATE_INACTIVE);
-            getQsTile().updateTile();
+            setTileInactive();
         }
+    }
+
+    private void initStrings() {
+        if (soundString == null) {
+            soundString = getString(R.string.sound);
+        }
+        if (silenString == null) {
+            silenString = getString(R.string.silent);
+        }
+        if (vibrateString == null) {
+            vibrateString = getString(R.string.vibrate);
+        }
+        if (noMusicString == null) {
+            noMusicString = getString(R.string.music_off);
+        }
+    }
+
+    private void setTileInactive() {
+        getQsTile().setState(Tile.STATE_INACTIVE);
+        getQsTile().updateTile();
     }
 
     private void setTileAction() {
@@ -123,27 +167,45 @@ public class SoundProfileTileService extends TileService {
             return;
         }
 
-        if (getQsTile().getLabel().equals(getString(R.string.sound))) {
-            Log.d(TAG, "setTileAction: sound to vibrate");
-            setVibrateMode();
+        getQsTile().setState(Tile.STATE_ACTIVE);
+        getQsTile().updateTile();
+        setNextMode();
+    }
+
+    private void setNextMode() {
+        String nexModeLabel = PreferenceUtil.getNexTEnabledMode(getBaseContext(), stringToPrefLabel((String) getQsTile().getLabel()));
+        if (nexModeLabel == null) {
+            Toast.makeText(getBaseContext(), R.string.no_enabled_tiles, Toast.LENGTH_SHORT).show();
+//            setTileInactive();
             return;
         }
-
-        if (getQsTile().getLabel().equals(getString(R.string.vibrate))) {
-            Log.d(TAG, "setTileAction: vibrate to silent");
-            setSilentMode();
-            return;
+        switch (nexModeLabel) {
+            case PreferenceUtil.MODE_NORMAL:
+                setSoundMode();
+                break;
+            case PreferenceUtil.MODE_SILENT:
+                setSilentMode();
+                break;
+            case PreferenceUtil.MODE_VIBRATE:
+                setVibrateMode();
+                break;
+            case PreferenceUtil.MODE_NO_MEDIA:
+                setMusicOffMode();
+                break;
         }
+    }
 
-        if (getQsTile().getLabel().equals(getString(R.string.silent))) {
-            Log.d(TAG, "setTileAction: silent to music off");
-            setMusicOffMode();
-            return;
-        }
-
-        if (getQsTile().getLabel().equals(getString(R.string.music_off))) {
-            Log.d(TAG, "setTileAction: music off to sound");
-            setSoundMode();
+    private String stringToPrefLabel(String string) {
+        if (string.equals(soundString)) {
+            return PreferenceUtil.MODE_NORMAL;
+        } else if (string.equals(silenString)) {
+            return PreferenceUtil.MODE_SILENT;
+        } else if (string.equals(vibrateString)) {
+            return PreferenceUtil.MODE_VIBRATE;
+        } else if (string.equals(noMusicString)) {
+            return PreferenceUtil.MODE_NO_MEDIA;
+        } else {
+            throw new IllegalArgumentException(string + " is not a valid label");
         }
     }
 
@@ -185,25 +247,25 @@ public class SoundProfileTileService extends TileService {
 
     private void setTileSilent() {
         getQsTile().setIcon(getIconForResId(R.drawable.ic_volume_off_white_24dp));
-        getQsTile().setLabel(getString(R.string.silent));
+        getQsTile().setLabel(silenString);
         getQsTile().updateTile();
     }
 
     private void setTileVibrate() {
         getQsTile().setIcon(getIconForResId(R.drawable.ic_vibration_white_24dp));
-        getQsTile().setLabel(getString(R.string.vibrate));
+        getQsTile().setLabel(vibrateString);
         getQsTile().updateTile();
     }
 
     private void setTileSound() {
         getQsTile().setIcon(getIconForResId(R.drawable.ic_volume_up_white_24dp));
-        getQsTile().setLabel(getString(R.string.sound));
+        getQsTile().setLabel(soundString);
         getQsTile().updateTile();
     }
 
     private void setTileMusicOff() {
         getQsTile().setIcon(getIconForResId(R.drawable.ic_music_off));
-        getQsTile().setLabel(getString(R.string.music_off));
+        getQsTile().setLabel(noMusicString);
         getQsTile().updateTile();
     }
 }

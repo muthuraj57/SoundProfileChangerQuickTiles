@@ -1,6 +1,7 @@
 package com.muthuraj.soundprofilechanger;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 /**
  * Created by Muthuraj on 18/11/17.
@@ -59,7 +60,7 @@ final class PreferenceUtil {
                 .getInt(keyName + INDEX, 0);
     }
 
-    public static void putIndex(Context context, String keyName, int index){
+    public static void putIndex(Context context, String keyName, int index) {
         context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
                 .edit()
                 .putInt(keyName + INDEX, index)
@@ -76,5 +77,26 @@ final class PreferenceUtil {
                 .edit()
                 .putBoolean(modeLabel + MODE_ENABLED, enable)
                 .apply();
+    }
+
+    /*
+    * Loop through all modes by index and return first enabled mode.
+    * If none of the next modes are enabled, null will be returned.
+    * */
+    @Nullable
+    public static String getNexTEnabledMode(Context context, String modeLabel) {
+        int index = getIndex(context, modeLabel);
+        int nexIndex = index + 1;
+        while (nexIndex != index) {
+            if (nexIndex > 3) {
+                nexIndex = 0;
+            }
+            String modeLabelForIndex = getModeLabelForIndex(context, nexIndex);
+            if (isModeEnabled(context, modeLabelForIndex)) {
+                return modeLabelForIndex;
+            }
+            nexIndex++;
+        }
+        return null;
     }
 }
