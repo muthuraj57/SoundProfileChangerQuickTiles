@@ -11,5 +11,9 @@
     <string name="music_off">Music Off</string>
     <string name="permission_rationale">To change sound profile, this app needs access to change Do Not Disturb permission</string>
 
-    <string name="no_enabled_tiles">No other modes are enabled</string>
+    <string name="allow">Allow</string>
+
+    <string name="no_enabled_tiles">No other modes are enabled. Want to enable/reorder modes?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

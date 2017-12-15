@@ -60,7 +60,7 @@ final class PreferenceUtil {
                 .getInt(keyName + INDEX, 0);
     }
 
-    public static void putIndex(Context context, String keyName, int index) {
+    static void putIndex(Context context, String keyName, int index) {
         context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
                 .edit()
                 .putInt(keyName + INDEX, index)
@@ -84,12 +84,15 @@ final class PreferenceUtil {
     * If none of the next modes are enabled, null will be returned.
     * */
     @Nullable
-    public static String getNexTEnabledMode(Context context, String modeLabel) {
+    static String getNexTEnabledMode(Context context, String modeLabel) {
         int index = getIndex(context, modeLabel);
         int nexIndex = index + 1;
         while (nexIndex != index) {
             if (nexIndex > 3) {
                 nexIndex = 0;
+                if (nexIndex == index) {
+                    return null;
+                }
             }
             String modeLabelForIndex = getModeLabelForIndex(context, nexIndex);
             if (isModeEnabled(context, modeLabelForIndex)) {

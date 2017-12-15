@@ -4,6 +4,7 @@ package com.muthuraj.soundprofilechanger;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.media.AudioManager;
@@ -11,11 +12,13 @@ import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.support.annotation.DrawableRes;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
 /**
  * Created by muthu-3955 on 12/02/17.
@@ -27,7 +30,7 @@ public class SoundProfileTileService extends TileService {
     private NotificationManager notificationManager;
 
     private String soundString;
-    private String silenString;
+    private String silentString;
     private String vibrateString;
     private String noMusicString;
 
@@ -72,6 +75,45 @@ public class SoundProfileTileService extends TileService {
             @Override
             public void onClick(View v) {
                 startActivityAndCollapse(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(view);
+        dialog.setTitle("Sound Profile Changer");
+
+        showDialog(dialog);
+    }
+
+    private void showDialogToEnableModes() {
+//        new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme))
+//                .setMessage(R.string.no_enabled_tiles)
+//                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        startActivity(new Intent(getBaseContext(), MainActivity.class));
+//                        dialog.dismiss();
+//                    }
+//                })
+//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                })
+//                .create()
+//                .show();
+        final Dialog dialog = new Dialog(this);
+
+        View view = LayoutInflater.from(this).inflate(R.layout.allow_permission_dialog, null);
+        TextView content = view.findViewById(R.id.content);
+        content.setText(R.string.no_enabled_tiles);
+        TextView allow = view.findViewById(R.id.allow);
+        allow.setText(R.string.ok);
+        allow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(), MainActivity.class));
                 dialog.dismiss();
             }
         });
@@ -143,8 +185,8 @@ public class SoundProfileTileService extends TileService {
         if (soundString == null) {
             soundString = getString(R.string.sound);
         }
-        if (silenString == null) {
-            silenString = getString(R.string.silent);
+        if (silentString == null) {
+            silentString = getString(R.string.silent);
         }
         if (vibrateString == null) {
             vibrateString = getString(R.string.vibrate);
@@ -175,8 +217,7 @@ public class SoundProfileTileService extends TileService {
     private void setNextMode() {
         String nexModeLabel = PreferenceUtil.getNexTEnabledMode(getBaseContext(), stringToPrefLabel((String) getQsTile().getLabel()));
         if (nexModeLabel == null) {
-            Toast.makeText(getBaseContext(), R.string.no_enabled_tiles, Toast.LENGTH_SHORT).show();
-//            setTileInactive();
+            showDialogToEnableModes();
             return;
         }
         switch (nexModeLabel) {
@@ -198,7 +239,7 @@ public class SoundProfileTileService extends TileService {
     private String stringToPrefLabel(String string) {
         if (string.equals(soundString)) {
             return PreferenceUtil.MODE_NORMAL;
-        } else if (string.equals(silenString)) {
+        } else if (string.equals(silentString)) {
             return PreferenceUtil.MODE_SILENT;
         } else if (string.equals(vibrateString)) {
             return PreferenceUtil.MODE_VIBRATE;
@@ -247,7 +288,7 @@ public class SoundProfileTileService extends TileService {
 
     private void setTileSilent() {
         getQsTile().setIcon(getIconForResId(R.drawable.ic_volume_off_white_24dp));
-        getQsTile().setLabel(silenString);
+        getQsTile().setLabel(silentString);
         getQsTile().updateTile();
     }
 
