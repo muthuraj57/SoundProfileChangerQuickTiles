@@ -15,114 +15,38 @@
         android:background="@color/colorPrimary"
         app:titleTextColor="#FFFFFF" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/helper_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:text="@string/permission_rationale" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="Allow" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/sound_profile_container"
+            android:id="@+id/permission_rationale_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/helper_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="setSoundMode"
-                android:orientation="horizontal"
-                android:padding="@dimen/activity_vertical_margin">
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="@string/permission_rationale" />
 
-                <CheckBox
-                    android:id="@+id/normal_checkbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="setSoundMode" />
-
-                <TextView
-                    android:id="@+id/normal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Normal" />
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="setVibrateMode"
-                android:orientation="horizontal"
-                android:padding="@dimen/activity_vertical_margin">
-
-                <CheckBox
-                    android:id="@+id/vibrate_checkbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="setVibrateMode" />
-
-                <TextView
-                    android:id="@+id/vibrate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vibrate" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="setSilentMode"
-                android:orientation="horizontal"
-                android:padding="@dimen/activity_vertical_margin">
-
-                <CheckBox
-                    android:id="@+id/silent_checkbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="setSilentMode" />
-
-                <TextView
-                    android:id="@+id/silent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Silent" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="setMusicOff"
-                android:orientation="horizontal"
-                android:padding="@dimen/activity_vertical_margin">
-
-                <CheckBox
-                    android:id="@+id/music_off_checkbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="setMusicOff" />
-
-                <TextView
-                    android:id="@+id/music_off"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Music Only Off" />
-            </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="Allow" />
         </LinearLayout>
-    </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mode_reorder_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/audio_mode_item" />
+    </FrameLayout>
 </LinearLayout>
