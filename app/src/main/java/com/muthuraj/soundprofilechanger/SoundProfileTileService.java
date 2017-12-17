@@ -4,7 +4,6 @@ package com.muthuraj.soundprofilechanger;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.media.AudioManager;
@@ -12,10 +11,8 @@ import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.support.annotation.DrawableRes;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -86,23 +83,6 @@ public class SoundProfileTileService extends TileService {
     }
 
     private void showDialogToEnableModes() {
-//        new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme))
-//                .setMessage(R.string.no_enabled_tiles)
-//                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        startActivity(new Intent(getBaseContext(), MainActivity.class));
-//                        dialog.dismiss();
-//                    }
-//                })
-//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                })
-//                .create()
-//                .show();
         final Dialog dialog = new Dialog(this);
 
         View view = LayoutInflater.from(this).inflate(R.layout.allow_permission_dialog, null);
@@ -155,7 +135,7 @@ public class SoundProfileTileService extends TileService {
                         }
                     } else {
                         if (PreferenceUtil.isModeEnabled(context, PreferenceUtil.MODE_NORMAL)) {
-                            setTileSound();
+                            setSoundMode();
                         } else {
                             setTileInactive();
                         }
@@ -163,14 +143,14 @@ public class SoundProfileTileService extends TileService {
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
                     if (PreferenceUtil.isModeEnabled(context, PreferenceUtil.MODE_VIBRATE)) {
-                        setTileVibrate();
+                        setVibrateMode();
                     } else {
                         setTileInactive();
                     }
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
                     if (PreferenceUtil.isModeEnabled(context, PreferenceUtil.MODE_SILENT)) {
-                        setTileSilent();
+                        setSilentMode();
                     } else {
                         setTileInactive();
                     }
@@ -252,6 +232,7 @@ public class SoundProfileTileService extends TileService {
 
     public void setSoundMode() {
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamMaxVolume(AudioManager.STREAM_RING), AudioManager.FLAG_ALLOW_RINGER_MODES);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
         setTileSound();
     }
@@ -270,6 +251,7 @@ public class SoundProfileTileService extends TileService {
 
     public void setMusicOffMode() {
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamMaxVolume(AudioManager.STREAM_RING), AudioManager.FLAG_ALLOW_RINGER_MODES);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
         setTileMusicOff();
     }
